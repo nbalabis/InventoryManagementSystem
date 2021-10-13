@@ -70,6 +70,7 @@ public class AddPartController implements Initializable {
     public void onOutsourced(ActionEvent actionEvent) {
         partType.setText("Company Name");
     }
+
     public void savePart(ActionEvent actionEvent) {
         int id = generateId();
         String name = partNameTxt.getText();

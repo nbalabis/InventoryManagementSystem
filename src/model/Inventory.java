@@ -16,6 +16,10 @@ public class Inventory {
         allProducts.add(newProduct);
     }
 
+    /**This method finds a part by part ID.
+     * @param partId ID of part to look up.
+     * @return Returns part with matching ID or null if there are no matches.
+     * */
     public static Part lookupPart(int partId) {
         for(Part pt : allParts){
             if(pt.getId() == partId){
