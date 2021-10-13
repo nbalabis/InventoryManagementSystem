@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -26,6 +27,7 @@ public class AddPartController implements Initializable {
     public Label partType;
     public TextField partTypeTxt;
     public Label errorMessage;
+    public Button homeButton;
     @FXML
     private RadioButton partInHouseRBtn;
 
@@ -86,14 +88,7 @@ public class AddPartController implements Initializable {
             Outsourced newPart = new Outsourced(id, name, price, stock, min, max, companyName);
             Inventory.addPart(newPart);
         }
-        partNameTxt.setText("");
-        partInvTxt.setText("");
-        partPriceTxt.setText("");
-        partMinTxt.setText("");
-        partMaxTxt.setText("");
-        partTypeTxt.setText("");
-        errorMessage.setText("New part saved successfully.");
-        //FIXME: I think I'd rather this just automatically go back to main like 'Add Product' page
+        homeButton.fireEvent(new ActionEvent());
     }
 
     private int generateId() {

@@ -28,7 +28,7 @@ public class MainController implements Initializable {
     private TableView<Part> partTableView;
 
     @FXML
-    private TableColumn<?, ?> partIdCol;
+    private TableColumn<Part, Integer> partIdCol;
 
     @FXML
     private TableColumn<?, ?> partNameCol;
@@ -43,7 +43,7 @@ public class MainController implements Initializable {
     private TableView<Product> productTableView;
 
     @FXML
-    private TableColumn<?, ?> productIdCol;
+    private TableColumn<Product, Integer> productIdCol;
 
     @FXML
     private TableColumn<?, ?> productNameCol;
@@ -66,12 +66,16 @@ public class MainController implements Initializable {
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        partTableView.getSortOrder().add(partIdCol);
+        partTableView.sort();
 
         productTableView.setItems(Inventory.getAllProducts());
         productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productTableView.getSortOrder().add(productIdCol);
+        productTableView.sort();
     }
 
     @FXML

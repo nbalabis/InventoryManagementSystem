@@ -6,12 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.InHouse;
+import model.Inventory;
 import model.Outsourced;
 import model.Part;
 import java.io.IOException;
@@ -32,6 +30,7 @@ public class ModifyPartController implements Initializable {
     public Label partType;
     public Label errorMessage;
     private static Part selectedPart = null;
+    public Button homeButton;
 
     public static void getSelectedPart(Part part) {
         selectedPart = part;
@@ -76,28 +75,23 @@ public class ModifyPartController implements Initializable {
     }
 
     public void savePart(ActionEvent actionEvent) throws IOException {
-        //FIXME: how to handle switching b/t in house and outsourced?
-        selectedPart.setName(partNameTxt.getText());
-        selectedPart.setStock(Integer.parseInt(partInvTxt.getText()));
-        selectedPart.setPrice(Double.parseDouble(partPriceTxt.getText()));
-        selectedPart.setMax(Integer.parseInt(partMaxTxt.getText()));
-        selectedPart.setMin(Integer.parseInt(partMinTxt.getText()));
-        if(selectedPart instanceof InHouse) {
-            ((InHouse) selectedPart).setMachineId(Integer.parseInt(partTypeTxt.getText()));
-            if(partOutsourcedRBtn.isSelected()){
-                //FIXME: casting won't work bc Inhouse Machine id type is int, but Outsourced requires string type
-            }
+        int id = selectedPart.getId();
+        String name = partNameTxt.getText();
+        Double price = Double.parseDouble(partPriceTxt.getText());
+        int stock = Integer.parseInt(partInvTxt.getText());
+        int min = Integer.parseInt(partMinTxt.getText());
+        int max = Integer.parseInt(partMaxTxt.getText());
+        if(partOutsourcedRBtn.isSelected()) {
+            String companyName = partTypeTxt.getText();
+            Part newPart = new Outsourced(id, name, price, stock, min, max, companyName);
+            Inventory.addPart(newPart);
         }
-        if(selectedPart instanceof Outsourced) {
-            ((Outsourced) selectedPart).setCompanyName(partTypeTxt.getText());
+        if(partInHouseRBtn.isSelected()) {
+            int machineId = Integer.parseInt(partTypeTxt.getText());
+            Part newPart = new InHouse(id, name, price, stock, min, max, machineId);
+            Inventory.addPart(newPart);
         }
-
-        //FIXME: Can I call this code without having to rewrite it?
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml"));
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 760, 320);
-        stage.setTitle("Main Form");
-        stage.setScene(scene);
-        stage.show();
+        Inventory.deletePart(selectedPart);
+        homeButton.fireEvent(new ActionEvent());
     }
 }

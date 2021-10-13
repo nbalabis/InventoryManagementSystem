@@ -71,7 +71,7 @@
                <children>
                   <Label fx:id="errorMessage" />
                   <Button mnemonicParsing="false" onAction="#savePart" text="Save" />
-                  <Button mnemonicParsing="false" onAction="#toMain" text="Cancel" />
+                   <Button fx:id="homeButton" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
                </children>
                <VBox.margin>
                   <Insets />
