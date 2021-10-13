@@ -6,9 +6,6 @@ package model;
  * @author Nicholas Balabis
  */
 public class Outsourced extends Part{
-    /**
-     * Company Name of the part.
-     */
     private String companyName;
 
     /**

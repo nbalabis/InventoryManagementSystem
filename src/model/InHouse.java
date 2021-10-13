@@ -6,9 +6,6 @@ package model;
  * @author Nicholas Balabis
  */
 public class InHouse  extends Part{
-    /**
-     * Machine ID of the part.
-     */
     private int machineId;
 
     /**
