@@ -24,7 +24,7 @@ public class MainController implements Initializable {
 
     public TextField productSearchTxt;
 
-    @FXML //FIXME: are all these @FXMLs really needed?
+    @FXML
     private TableView<Part> partTableView;
 
     @FXML

@@ -70,10 +70,10 @@ public class AddPartController implements Initializable {
     public void onOutsourced(ActionEvent actionEvent) {
         partType.setText("Company Name");
     }
-    //FIXME: catch empty values & incorrect entries
     public void savePart(ActionEvent actionEvent) {
         int id = generateId();
         String name = partNameTxt.getText();
+        System.out.println(name);
         int stock = Integer.parseInt(partInvTxt.getText());
         double price = Double.parseDouble(partPriceTxt.getText());
         int min = Integer.parseInt(partMinTxt.getText());
