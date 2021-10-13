@@ -14,9 +14,9 @@ public abstract class Part {
     private int max;
 
     /**
-     * Constructor for part.
+     * Constructor for part instance.
      *
-     * @param id Id of the part.
+     * @param id ID of the part.
      * @param name Name of the part.
      * @param price Price of the part.
      * @param stock Inventory of the part.

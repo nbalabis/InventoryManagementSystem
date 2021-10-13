@@ -9,7 +9,7 @@ public class InHouse  extends Part{
     private int machineId;
 
     /**
-     * Constructor for a new In-House part.
+     * Constructor for a new In-House part instance.
      *
      * @param id Id of the part.
      * @param name Name of the part.
@@ -31,7 +31,7 @@ public class InHouse  extends Part{
      */
     public void setMachineId(int machineId) {
         this.machineId = machineId;
-    }
+    } //FIXME: method never used
 
     /**
      * Machine ID getter.

@@ -9,7 +9,7 @@ public class Outsourced extends Part{
     private String companyName;
 
     /**
-     * Constructor for a new Outsourced part.
+     * Constructor for a new Outsourced part instance.
      *
      * @param id Id of the part.
      * @param name Name of the part.
@@ -31,7 +31,7 @@ public class Outsourced extends Part{
      */
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
+    } //FIXME: method never used
 
     /**
      * Company name getter.
