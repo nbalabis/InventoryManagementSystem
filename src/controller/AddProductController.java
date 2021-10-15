@@ -9,10 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
@@ -20,6 +17,7 @@ import model.Part;
 import model.Product;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -79,14 +77,17 @@ public class AddProductController implements Initializable {
     @FXML
     public Button homeButton;
 
-    @FXML //FIXME: can I make this final?
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    @FXML
+    public Label errorMsg;
+
+    @FXML
+    private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     /**
      * Initializes controller and fills tables with starting values.
      *
-     * @param url
-     * @param resourceBundle
+     * @param url url
+     * @param resourceBundle resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -156,18 +157,35 @@ public class AddProductController implements Initializable {
      */
     @FXML
     public void onSaveProduct(ActionEvent actionEvent) {
-        int id = generateId();
-        String name = productNameTxt.getText();
-        double price =  Double.parseDouble(productPriceTxt.getText());
-        int stock = Integer.parseInt(productInvTxt.getText());
-        int min = Integer.parseInt(productMinTxt.getText());
-        int max = Integer.parseInt(productMaxTxt.getText());
-        Product newProduct = new Product(id, name, price, stock, min, max);
-        Inventory.addProduct(newProduct);
-        for(Part pt : associatedParts) {
-            newProduct.addAssociatedPart(pt);
+        displayError(0);
+        try {
+            int id = generateId();
+            String name = productNameTxt.getText();
+            if (name.equals("")) {
+                displayError(2);
+                return;
+            }
+            double price = Double.parseDouble(productPriceTxt.getText());
+            int stock = Integer.parseInt(productInvTxt.getText());
+            int min = Integer.parseInt(productMinTxt.getText());
+            int max = Integer.parseInt(productMaxTxt.getText());
+            if(min < 0 || min > max) {
+                displayError(3);
+                return;
+            }
+            if(stock < min || stock > max) {
+                displayError(4);
+                return;
+            }
+            Product newProduct = new Product(id, name, price, stock, min, max);
+            Inventory.addProduct(newProduct);
+            for (Part pt : associatedParts) {
+                newProduct.addAssociatedPart(pt);
+            }
+            homeButton.fireEvent(new ActionEvent());
+        } catch(Exception e) {
+            displayError(1);
         }
-        homeButton.fireEvent(new ActionEvent());
     }
 
     /**
@@ -188,14 +206,39 @@ public class AddProductController implements Initializable {
     }
 
     /**
+     * Displays error message based on error type.
+     *
+     * @param errorCode Code corresponding to error type.
+     */
+    @FXML
+    private void displayError(int errorCode) {
+        switch(errorCode) {
+            case 0:
+                errorMsg.setText("");
+                break;
+            case 1:
+                errorMsg.setText("Form contains empty/invalid values.");
+                break;
+            case 2:
+                errorMsg.setText("Product must have a valid name.");
+                break;
+            case 3:
+                errorMsg.setText("Min cannot be < 0 or > max.");
+                break;
+            case 4:
+                errorMsg.setText("Inv must be b/t min and max.");
+                break;
+        }
+    }
+
+    /**
      * Returns to main screen
      *
      * @param actionEvent Cancel button clicked.
      * @throws IOException Throws IO Exception.
      */
-    //FIXME: can loader be "require not null?"
     public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Main.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 760, 320);
         stage.setTitle("Main Form");

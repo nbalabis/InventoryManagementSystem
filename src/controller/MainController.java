@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import model.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -30,6 +31,9 @@ public class MainController implements Initializable {
 
     @FXML
     public TextField productSearchTxt;
+
+    @FXML
+    public Label errorMsg;
 
     @FXML
     private TableView<Part> partTableView;
@@ -61,15 +65,11 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<Product, Double> productPriceCol;
 
-    public Label partErrorMsg; //FIXME: can I reduce these to one field
-
-    public Label productErrorMsg;
-
     /**
      * Initializes controller and fills tables with starting values.
      *
-     * @param url
-     * @param resourceBundle
+     * @param url url
+     * @param resourceBundle resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -99,7 +99,7 @@ public class MainController implements Initializable {
      */
     @FXML
     void onAddPart(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPart.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddPart.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 490, 345);
         stage.setTitle("Add Part");
@@ -115,7 +115,7 @@ public class MainController implements Initializable {
      */
     @FXML
     void onAddProduct(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddProduct.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddProduct.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 700, 475);
         stage.setTitle("Add Product");
@@ -132,11 +132,11 @@ public class MainController implements Initializable {
     @FXML
     void onModifyPart(ActionEvent actionEvent) throws IOException{
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
-        if(selectedPart == null) { //FIXME: add more robust error catching.
-            partErrorMsg.setText("Select a part to modify.");
+        if(selectedPart == null) {
+            displayError(1);
         } else {
             ModifyPartController.getSelectedPart(selectedPart);
-            Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyPart.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPart.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 490, 345);
             stage.setTitle("Modify Part");
@@ -155,11 +155,11 @@ public class MainController implements Initializable {
     @FXML
     void onModifyProduct(ActionEvent actionEvent) throws IOException{
         Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-        if(selectedProduct == null) { //FIXME: add more robust error catching.
-            productErrorMsg.setText("Select a product to modify.");
+        if(selectedProduct == null) {
+            displayError(2);
         } else {
             ModifyProductController.getSelectedProduct(selectedProduct);
-            Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyProduct.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyProduct.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 700, 475);
             stage.setTitle("Modify Product");
@@ -176,8 +176,13 @@ public class MainController implements Initializable {
     @FXML
     public void onDeletePart(ActionEvent actionEvent) {
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
-        Inventory.deletePart(selectedPart);
-        partTableView.setItems(Inventory.getAllParts());
+        if(selectedPart == null) {
+            displayError(3);
+        } else {
+            Inventory.deletePart(selectedPart);
+            partTableView.setItems(Inventory.getAllParts());
+            displayError(0);
+        }
     }
 
     /**
@@ -188,7 +193,13 @@ public class MainController implements Initializable {
     @FXML
     public void onDeleteProduct(ActionEvent actionEvent) {
         Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-        Inventory.deleteProduct(selectedProduct);
+        if(selectedProduct == null) {
+            displayError(4);
+        } else {
+            Inventory.deleteProduct(selectedProduct);
+            productTableView.setItems(Inventory.getAllProducts());
+            displayError(0);
+        }
     }
 
 /*FIXME: Test Data */
@@ -271,6 +282,32 @@ public class MainController implements Initializable {
 
         productTableView.setItems(products);
         productSearchTxt.setText("");
+    }
+
+    /**
+     * Displays error message based on error type.
+     *
+     * @param errorCode Code corresponding to error type.
+     */
+    @FXML
+    private void displayError(int errorCode) {
+        switch(errorCode) {
+            case 0:
+                errorMsg.setText("");
+                break;
+            case 1:
+                errorMsg.setText("Select a part to modify.");
+                break;
+            case 2:
+                errorMsg.setText("Select a product to modify.");
+                break;
+            case 3:
+                errorMsg.setText("Select a part to delete.");
+                break;
+            case 4:
+                errorMsg.setText("Select a product to delete.");
+                break;
+        }
     }
 
     /**

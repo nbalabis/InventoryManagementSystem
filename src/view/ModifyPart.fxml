@@ -67,9 +67,9 @@
                         </TextField>
                     </children>
                 </GridPane>
-                <HBox alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="50.0" prefWidth="450.0" spacing="20.0">
+                <HBox alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="50.0" prefWidth="450.0" spacing="25.0">
                     <children>
-                        <Label fx:id="errorMessage" />
+                        <Label fx:id="errorMsg" textFill="GREY" />
                         <Button mnemonicParsing="false" onAction="#savePart" text="Save" />
                         <Button fx:id="homeButton" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
                     </children>

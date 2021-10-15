@@ -88,8 +88,9 @@
                      </columns>
                   </TableView>
                   <Button mnemonicParsing="false" onAction="#onRemoveAssociatedPart" text="Remove Associated Part" />
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                      <children>
+                        <Label fx:id="errorMsg" textFill="GREY" />
                         <Button mnemonicParsing="false" onAction="#onSaveProduct" text="Save" />
                           <Button fx:id="homeButton" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
                      </children>

@@ -19,6 +19,7 @@ import model.Outsourced;
 import model.Part;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -28,13 +29,13 @@ import java.util.ResourceBundle;
  */
 public class AddPartController implements Initializable {
     @FXML
+    public Label errorMsg;
+
+    @FXML
     private Label partType;
 
     @FXML
     private TextField partTypeTxt;
-
-    @FXML
-    private Label errorMessage; //FIXME: add error logic
 
     @FXML
     private Button homeButton;
@@ -63,8 +64,8 @@ public class AddPartController implements Initializable {
     /**
      * Initializes controller.
      *
-     * @param url
-     * @param resourceBundle
+     * @param url url
+     * @param resourceBundle resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -97,25 +98,45 @@ public class AddPartController implements Initializable {
      */
     @FXML
     public void savePart(ActionEvent actionEvent) {
-        int id = generateId();
-        String name = partNameTxt.getText();
-        System.out.println(name);
-        int stock = Integer.parseInt(partInvTxt.getText());
-        double price = Double.parseDouble(partPriceTxt.getText());
-        int min = Integer.parseInt(partMinTxt.getText());
-        int max = Integer.parseInt(partMaxTxt.getText());
-
-        if(partInHouseRBtn.isSelected()){
-            int machineId = Integer.parseInt(partTypeTxt.getText());
-            InHouse newPart = new InHouse(id, name, price, stock, min, max, machineId);
-            Inventory.addPart(newPart);
+        displayError(0);
+        try {
+            int id = generateId();
+            String name = partNameTxt.getText();
+            if (name.equals("")) {
+                displayError(2);
+                return;
+            }
+            double price = Double.parseDouble(partPriceTxt.getText());
+            int min = Integer.parseInt(partMinTxt.getText());
+            int max = Integer.parseInt(partMaxTxt.getText());
+            int stock = Integer.parseInt(partInvTxt.getText());
+            if(min < 0 || min > max) {
+                displayError(3);
+                return;
+            }
+            if(stock < min || stock > max) {
+                displayError(4);
+                return;
+            }
+            if (partInHouseRBtn.isSelected()) {
+                try {
+                    int machineId = Integer.parseInt(partTypeTxt.getText());
+                    InHouse newPart = new InHouse(id, name, price, stock, min, max, machineId);
+                    Inventory.addPart(newPart);
+                } catch (Exception e) {
+                    displayError(5);
+                    return;
+                }
+            }
+            if (partOutsourcedRBtn.isSelected()) {
+                String companyName = partTypeTxt.getText();
+                Outsourced newPart = new Outsourced(id, name, price, stock, min, max, companyName);
+                Inventory.addPart(newPart);
+            }
+            homeButton.fireEvent(new ActionEvent());
+        } catch(Exception e) {
+            displayError(1);
         }
-        if(partOutsourcedRBtn.isSelected()){
-            String companyName = partTypeTxt.getText();
-            Outsourced newPart = new Outsourced(id, name, price, stock, min, max, companyName);
-            Inventory.addPart(newPart);
-        }
-        homeButton.fireEvent(new ActionEvent());
     }
 
     /**
@@ -136,6 +157,34 @@ public class AddPartController implements Initializable {
     }
 
     /**
+     * Displays error message based on error type.
+     *
+     * @param errorCode Code corresponding to error type.
+     */
+    @FXML
+    private void displayError(int errorCode) {
+        switch(errorCode) {
+            case 0:
+                errorMsg.setText("");
+                break;
+            case 1:
+                errorMsg.setText("Form contains empty/invalid values.");
+                break;
+            case 2:
+                errorMsg.setText("Part must have a valid name.");
+                break;
+            case 3:
+                errorMsg.setText("Min cannot be less than 0 or greater than max.");
+                break;
+            case 4:
+                errorMsg.setText("Inventory must be between min and max.");
+                break;
+            case 5:
+                errorMsg.setText("Machine ID must be a number.");
+        }
+    }
+
+    /**
      * Returns to main screen.
      *
      * @param actionEvent Cancel button clicked.
@@ -143,7 +192,7 @@ public class AddPartController implements Initializable {
      */
     @FXML
     void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml")); //FIXME: can this be changed to .notnull
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Main.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 760, 320);
         stage.setTitle("Main Form");

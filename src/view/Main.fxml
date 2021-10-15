@@ -43,11 +43,6 @@
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                  <children>
-                                    <Label fx:id="partErrorMsg" textFill="GREY">
-                                       <font>
-                                          <Font name="System Italic" size="13.0" />
-                                       </font>
-                                    </Label>
                                     <Button fx:id="addPart" mnemonicParsing="false" onAction="#onAddPart" text="Add" />
                                     <Button fx:id="modifyPart" mnemonicParsing="false" onAction="#onModifyPart" text="Modify" />
                                     <Button fx:id="deletePart" mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
@@ -80,11 +75,6 @@
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                  <children>
-                                    <Label fx:id="productErrorMsg" textFill="GREY">
-                                       <font>
-                                          <Font name="System Italic" size="13.0" />
-                                       </font>
-                                    </Label>
                                     <Button fx:id="addProduct" mnemonicParsing="false" onAction="#onAddProduct" text="Add" />
                                     <Button fx:id="modifyProduct" mnemonicParsing="false" onAction="#onModifyProduct" text="Modify" />
                                     <Button fx:id="deleteProduct" mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
@@ -99,8 +89,9 @@
                   </Pane>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="740.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="740.0" spacing="25.0">
                <children>
+                  <Label fx:id="errorMsg" textFill="GREY" />
                   <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#closeProgram" text="Exit" />
                </children>
             </HBox>
