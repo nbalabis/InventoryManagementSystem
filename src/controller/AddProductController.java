@@ -3,6 +3,7 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -17,31 +18,76 @@ import javafx.stage.Stage;
 import model.Inventory;
 import model.Part;
 import model.Product;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller logic for Add Product Page.
+ *
+ * @author Nicholas Balabis
+ */
 public class AddProductController implements Initializable {
+    @FXML
     public TextField productNameTxt;
+
+    @FXML
     public TextField productInvTxt;
+
+    @FXML
     public TextField productPriceTxt;
+
+    @FXML
     public TextField productMaxTxt;
+
+    @FXML
     public TextField productMinTxt;
+
+    @FXML
     public TextField partSearchTxt;
+
+    @FXML
     public TableView<Part> partTableView;
-    public TableColumn partIdCol;
-    public TableColumn partNameCol;
-    public TableColumn partInventoryCol;
-    public TableColumn partPriceCol;
+
+    @FXML
+    public TableColumn<Part, Integer> partIdCol;
+
+    @FXML
+    public TableColumn<Part, String> partNameCol;
+
+    @FXML
+    public TableColumn<Part, Integer> partInventoryCol;
+
+    @FXML
+    public TableColumn<Part, Double> partPriceCol;
+
+    @FXML
     public TableView<Part> associatedPartTableView;
-    public TableColumn associatedPartIdCol;
-    public TableColumn associatedPartNameCol;
-    public TableColumn associatedPartInventoryCol;
-    public TableColumn associatedPartPriceCol;
+
+    @FXML
+    public TableColumn<Part, Integer> associatedPartIdCol;
+
+    @FXML
+    public TableColumn<Part, String> associatedPartNameCol;
+
+    @FXML
+    public TableColumn<Part, Integer> associatedPartInventoryCol;
+
+    @FXML
+    public TableColumn<Part, Double> associatedPartPriceCol;
+
+    @FXML
     public Button homeButton;
+
+    @FXML //FIXME: can I make this final?
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
+    /**
+     * Initializes controller and fills tables with starting values.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partTableView.setItems(Inventory.getAllParts());
@@ -57,15 +103,12 @@ public class AddProductController implements Initializable {
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml"));
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 760, 320);
-        stage.setTitle("Main Form");
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    /**
+     * Searches inventory for part with matching ID or partial string and displays results.
+     *
+     * @param actionEvent Part search field action event.
+     */
+    @FXML
     public void getPartResults(ActionEvent actionEvent) {
         String query = partSearchTxt.getText();
         ObservableList<Part> parts = Inventory.lookupPart(query);
@@ -77,23 +120,41 @@ public class AddProductController implements Initializable {
                     parts.add(pt);
                 }
             }
-            catch (NumberFormatException e){}
+            catch (NumberFormatException ignored){}
         }
         partTableView.setItems(parts);
         partSearchTxt.setText("");
     }
 
+    /**
+     * Adds a part to the Associated Parts table and list.
+     *
+     * @param actionEvent Add button clicked.
+     */
+    @FXML
     public void onAddAssociatedPart(ActionEvent actionEvent) {
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
         associatedParts.add(selectedPart);
 
     }
 
+    /**
+     * Removes a part from the Associated Parts table and list.
+     *
+     * @param actionEvent Remove button clicked.
+     */
+    @FXML
     public void onRemoveAssociatedPart(ActionEvent actionEvent) {
         Part selectedPart = associatedPartTableView.getSelectionModel().getSelectedItem();
         associatedParts.remove(selectedPart);
     }
 
+    /**
+     * Creates a new Product and adds to inventory.
+     *
+     * @param actionEvent Save button clicked.
+     */
+    @FXML
     public void onSaveProduct(ActionEvent actionEvent) {
         int id = generateId();
         String name = productNameTxt.getText();
@@ -109,6 +170,12 @@ public class AddProductController implements Initializable {
         homeButton.fireEvent(new ActionEvent());
     }
 
+    /**
+     * Generates a unique Product ID.
+     *
+     * @return New product ID.
+     */
+    //FIXME: move method to Main.java
     private int generateId() {
         int maxId = 1000;
         ObservableList<Product> allProducts = Inventory.getAllProducts();
@@ -118,5 +185,21 @@ public class AddProductController implements Initializable {
             }
         }
         return maxId + 1;
+    }
+
+    /**
+     * Returns to main screen
+     *
+     * @param actionEvent Cancel button clicked.
+     * @throws IOException Throws IO Exception.
+     */
+    //FIXME: can loader be "require not null?"
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml"));
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 760, 320);
+        stage.setTitle("Main Form");
+        stage.setScene(scene);
+        stage.show();
     }
 }

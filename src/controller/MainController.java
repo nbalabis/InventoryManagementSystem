@@ -238,8 +238,7 @@ public class MainController implements Initializable {
                     parts.add(pt);
                 }
             }
-            catch (NumberFormatException e){
-                //ignore
+            catch (NumberFormatException ignored){
             }
         }
 
