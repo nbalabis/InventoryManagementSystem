@@ -9,9 +9,9 @@ import javafx.collections.ObservableList;
  * @author Nicholas Balabis
  */
 public class Inventory {
-    private static ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static ObservableList<Part> allParts = FXCollections.observableArrayList(); //FIXME: will adding 'final' affect any parts of project?
 
-    private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private static ObservableList<Product> allProducts = FXCollections.observableArrayList(); //FIXME: will adding 'final' affect any parts of project?
 
     /**
      * Adds a part to inventory.

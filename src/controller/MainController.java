@@ -19,9 +19,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Control logic for main screen.
+ *
+ * @author Nicholas Balabis
+ */
 public class MainController implements Initializable {
+    @FXML
     public TextField partSearchTxt;
 
+    @FXML
     public TextField productSearchTxt;
 
     @FXML
@@ -31,13 +38,13 @@ public class MainController implements Initializable {
     private TableColumn<Part, Integer> partIdCol;
 
     @FXML
-    private TableColumn<?, ?> partNameCol;
+    private TableColumn<Part, String> partNameCol;
 
     @FXML
-    private TableColumn<?, ?> partInventoryCol;
+    private TableColumn<Part, Integer> partInventoryCol;
 
     @FXML
-    private TableColumn<?, ?> partPriceCol;
+    private TableColumn<Part, Double> partPriceCol;
 
     @FXML
     private TableView<Product> productTableView;
@@ -46,21 +53,27 @@ public class MainController implements Initializable {
     private TableColumn<Product, Integer> productIdCol;
 
     @FXML
-    private TableColumn<?, ?> productNameCol;
+    private TableColumn<Product, String> productNameCol;
 
     @FXML
-    private TableColumn<?, ?> productInventoryCol;
+    private TableColumn<Product, Integer> productInventoryCol;
 
     @FXML
-    private TableColumn<?, ?> productPriceCol;
+    private TableColumn<Product, Double> productPriceCol;
 
-    public Label partErrorMsg;
+    public Label partErrorMsg; //FIXME: can I reduce these to one field
 
     public Label productErrorMsg;
 
+    /**
+     * Initializes controller and fills tables with starting values.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addTestData(); //FIXME: delete after testing
+        addTestData(); //FIXME: delete after testing --or move to main and comment out
         partTableView.setItems(Inventory.getAllParts());
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -78,6 +91,12 @@ public class MainController implements Initializable {
         productTableView.sort();
     }
 
+    /**
+     * Loads and displays the Add Part window.
+     *
+     * @param actionEvent Add Part button clicked.
+     * @throws IOException Throws IO exception.
+     */
     @FXML
     void onAddPart(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddPart.fxml"));
@@ -88,6 +107,12 @@ public class MainController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Loads and displays the Add Product window.
+     *
+     * @param actionEvent Add Product button clicked.
+     * @throws IOException Throws IO exception.
+     */
     @FXML
     void onAddProduct(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddProduct.fxml"));
@@ -98,10 +123,16 @@ public class MainController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Loads and displays the Modify Part window.
+     *
+     * @param actionEvent Modify Part button clicked.
+     * @throws IOException Throws IO exception.
+     */
     @FXML
     void onModifyPart(ActionEvent actionEvent) throws IOException{
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
-        if(selectedPart == null) {
+        if(selectedPart == null) { //FIXME: add more robust error catching.
             partErrorMsg.setText("Select a part to modify.");
         } else {
             ModifyPartController.getSelectedPart(selectedPart);
@@ -115,10 +146,16 @@ public class MainController implements Initializable {
 
     }
 
+    /**
+     * Loads and displays Modify Product window.
+     *
+     * @param actionEvent Modify Product button clicked.
+     * @throws IOException Throws IO exception.
+     */
     @FXML
     void onModifyProduct(ActionEvent actionEvent) throws IOException{
         Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-        if(selectedProduct == null) {
+        if(selectedProduct == null) { //FIXME: add more robust error catching.
             productErrorMsg.setText("Select a product to modify.");
         } else {
             ModifyProductController.getSelectedProduct(selectedProduct);
@@ -131,12 +168,24 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Removes a Part from inventory and partTableView.
+     *
+     * @param actionEvent Delete part button clicked.
+     */
+    @FXML
     public void onDeletePart(ActionEvent actionEvent) {
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
         Inventory.deletePart(selectedPart);
         partTableView.setItems(Inventory.getAllParts());
     }
 
+    /**
+     * Removes a Product from inventory and productTableView.
+     *
+     * @param actionEvent Delete product button clicked.
+     */
+    @FXML
     public void onDeleteProduct(ActionEvent actionEvent) {
         Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
         Inventory.deleteProduct(selectedProduct);
@@ -171,6 +220,12 @@ public class MainController implements Initializable {
         testProduct2.addAssociatedPart(testPart3);
     }
 
+    /**
+     * Searches inventory for part with matching ID or partial string and displays results.
+     *
+     * @param actionEvent Part search field action event.
+     */
+    @FXML
     public void getPartResults(ActionEvent actionEvent) {
         String query = partSearchTxt.getText();
         ObservableList<Part> parts = Inventory.lookupPart(query);
@@ -192,6 +247,12 @@ public class MainController implements Initializable {
         partSearchTxt.setText("");
     }
 
+    /**
+     * Searches inventory for product with matching ID or partial string and displays results.
+     *
+     * @param actionEvent Product search field action event.
+     */
+    @FXML
     public void getProductResults(ActionEvent actionEvent) {
         String query = productSearchTxt.getText();
         ObservableList<Product> products = Inventory.lookupProduct(query);
@@ -213,6 +274,12 @@ public class MainController implements Initializable {
         productSearchTxt.setText("");
     }
 
+    /**
+     * Exits program.
+     *
+     * @param actionEvent Exit button clicked.
+     */
+    @FXML
     public void closeProgram(ActionEvent actionEvent) {
         System.exit(0);
     }
