@@ -60,10 +60,9 @@ public class ModifyPartController implements Initializable {
     public Label errorMessage;
 
     @FXML
-    private static Part selectedPart = null;
-
-    @FXML
     public Button homeButton;
+
+    private static Part selectedPart = null;
 
     /**
      * Grabs selected part from Main screen.
@@ -106,6 +105,7 @@ public class ModifyPartController implements Initializable {
      *
      * @param actionEvent In-House radio button clicked.
      */
+    @FXML
     public void onInHouse(ActionEvent actionEvent) {
         partType.setText("Machine ID");
     }
@@ -115,6 +115,7 @@ public class ModifyPartController implements Initializable {
      *
      * @param actionEvent Outsourced radio button clicked.
      */
+    @FXML
     public void onOutsourced(ActionEvent actionEvent) {
         partType.setText("Company Name");
     }
@@ -125,6 +126,7 @@ public class ModifyPartController implements Initializable {
      * @param actionEvent Save button clicked.
      * @throws IOException Throws IO Exception.
      */
+    @FXML
     public void savePart(ActionEvent actionEvent) throws IOException {
         int id = selectedPart.getId();
         String name = partNameTxt.getText();
