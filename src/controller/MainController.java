@@ -73,7 +73,7 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addTestData(); //FIXME: delete after testing --or move to main and comment out
+        //addTestData(); //FIXME: delete after testing --or move to main and comment out
         partTableView.setItems(Inventory.getAllParts());
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -17,17 +17,28 @@ import model.InHouse;
 import model.Inventory;
 import model.Outsourced;
 import model.Part;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller logic for Add Part page.
+ *
+ * @author Nicholas Balabis
+ */
 public class AddPartController implements Initializable {
+    @FXML
+    private Label partType;
 
-    public Label partType;
-    public TextField partTypeTxt;
-    public Label errorMessage;
-    public Button homeButton;
+    @FXML
+    private TextField partTypeTxt;
+
+    @FXML
+    private Label errorMessage; //FIXME: add error logic
+
+    @FXML
+    private Button homeButton;
+
     @FXML
     private RadioButton partInHouseRBtn;
 
@@ -49,28 +60,42 @@ public class AddPartController implements Initializable {
     @FXML
     private TextField partMinTxt;
 
-    @FXML
-    void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml"));
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 760, 320);
-        stage.setTitle("Main Form");
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    /**
+     * Initializes controller.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
+    /**
+     * Sets label text to "Machine ID"
+     *
+     * @param actionEvent In-House radio button selected.
+     */
+    @FXML
     public void onInHouse(ActionEvent actionEvent) {
         partType.setText("Machine ID");
     }
 
+    /**
+     * Sets label to "Company Name"
+     *
+     * @param actionEvent Outsourced radio button selected.
+     */
+    @FXML
     public void onOutsourced(ActionEvent actionEvent) {
         partType.setText("Company Name");
     }
 
+    /**
+     * Creates a new part and adds to inventory.
+     *
+     * @param actionEvent Save button clicked.
+     */
+    @FXML
     public void savePart(ActionEvent actionEvent) {
         int id = generateId();
         String name = partNameTxt.getText();
@@ -84,7 +109,8 @@ public class AddPartController implements Initializable {
             int machineId = Integer.parseInt(partTypeTxt.getText());
             InHouse newPart = new InHouse(id, name, price, stock, min, max, machineId);
             Inventory.addPart(newPart);
-        } else {
+        }
+        if(partOutsourcedRBtn.isSelected()){
             String companyName = partTypeTxt.getText();
             Outsourced newPart = new Outsourced(id, name, price, stock, min, max, companyName);
             Inventory.addPart(newPart);
@@ -92,6 +118,12 @@ public class AddPartController implements Initializable {
         homeButton.fireEvent(new ActionEvent());
     }
 
+    /**
+     * Generates a new unique Part ID.
+     *
+     * @return New part ID.
+     */
+    //FIXME: can I do this somewhere else, like Main?
     private int generateId() {
         int maxId = 1;
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -101,6 +133,22 @@ public class AddPartController implements Initializable {
             }
         }
         return maxId + 1;
+    }
+
+    /**
+     * Returns to main screen.
+     *
+     * @param actionEvent Cancel button clicked.
+     * @throws IOException Throws IO Exception.
+     */
+    @FXML
+    void toMain(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Main.fxml")); //FIXME: can this be changed to .notnull
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 760, 320);
+        stage.setTitle("Main Form");
+        stage.setScene(scene);
+        stage.show();
     }
 
 }
