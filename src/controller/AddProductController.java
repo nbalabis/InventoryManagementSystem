@@ -18,6 +18,7 @@ import model.Product;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -147,7 +148,17 @@ public class AddProductController implements Initializable {
     @FXML
     public void onRemoveAssociatedPart(ActionEvent actionEvent) {
         Part selectedPart = associatedPartTableView.getSelectionModel().getSelectedItem();
-        associatedParts.remove(selectedPart);
+        if(selectedPart == null) {
+            displayError(5);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setContentText("Are you sure you want to delete this associated part?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                associatedParts.remove(selectedPart);
+            }
+        }
     }
 
     /**
@@ -226,6 +237,9 @@ public class AddProductController implements Initializable {
                 break;
             case 4:
                 errorMsg.setText("Inv must be b/t min and max.");
+                break;
+            case 5:
+                errorMsg.setText("Select a part to remove.");
                 break;
         }
     }
