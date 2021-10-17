@@ -71,7 +71,7 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addTestData(); //FIXME: delete after testing --or move to main and comment out
+        //addTestData();
         partTableView.setItems(Inventory.getAllParts());
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -214,35 +214,6 @@ public class MainController implements Initializable {
         }
     }
 
-/*FIXME: Test Data */
-    private static boolean firstTime = true;
-
-    private void addTestData() {
-        if(!firstTime) {
-            return;
-        }
-        firstTime = false;
-
-        InHouse testPart1 = new InHouse(1, "Brakes", 15.00, 10, 2, 20, 5978);
-        Inventory.addPart(testPart1);
-        InHouse testPart2 = new InHouse(2, "Wheel", 11.00, 16, 8, 40, 2679);
-        Inventory.addPart(testPart2);
-        Outsourced testPart3 = new Outsourced(3, "Seat", 15.00, 10, 5, 15, "SeatsRUs");
-        Inventory.addPart(testPart3);
-        Product testProduct1 = new Product(1000, "Giant Bike", 299.99, 5, 5, 10);
-        Inventory.addProduct(testProduct1);
-        testProduct1.addAssociatedPart(testPart1);
-        testProduct1.addAssociatedPart(testPart2);
-        testProduct1.addAssociatedPart(testPart2);
-        testProduct1.addAssociatedPart(testPart3);
-        Product testProduct2 = new Product(1001, "Tricycle", 99.99, 3, 1, 10);
-        Inventory.addProduct(testProduct2);
-        testProduct2.addAssociatedPart(testPart2);
-        testProduct2.addAssociatedPart(testPart2);
-        testProduct2.addAssociatedPart(testPart2);
-        testProduct2.addAssociatedPart(testPart3);
-    }
-
     /**
      * Searches inventory for part with matching ID or partial string and displays results.
      *
@@ -334,4 +305,37 @@ public class MainController implements Initializable {
     public void closeProgram(ActionEvent actionEvent) {
         System.exit(0);
     }
+
+    /**
+     *  TEST DATA
+     */
+    /*
+    private static boolean firstTime = true;
+
+    private void addTestData() {
+        if(!firstTime) {
+            return;
+        }
+        firstTime = false;
+
+        InHouse testPart1 = new InHouse(1, "Brakes", 15.00, 10, 2, 20, 5978);
+        Inventory.addPart(testPart1);
+        InHouse testPart2 = new InHouse(2, "Wheel", 11.00, 16, 8, 40, 2679);
+        Inventory.addPart(testPart2);
+        Outsourced testPart3 = new Outsourced(3, "Seat", 15.00, 10, 5, 15, "SeatsRUs");
+        Inventory.addPart(testPart3);
+        Product testProduct1 = new Product(1000, "Giant Bike", 299.99, 5, 5, 10);
+        Inventory.addProduct(testProduct1);
+        testProduct1.addAssociatedPart(testPart1);
+        testProduct1.addAssociatedPart(testPart2);
+        testProduct1.addAssociatedPart(testPart2);
+        testProduct1.addAssociatedPart(testPart3);
+        Product testProduct2 = new Product(1001, "Tricycle", 99.99, 3, 1, 10);
+        Inventory.addProduct(testProduct2);
+        testProduct2.addAssociatedPart(testPart2);
+        testProduct2.addAssociatedPart(testPart2);
+        testProduct2.addAssociatedPart(testPart2);
+        testProduct2.addAssociatedPart(testPart3);
+    }
+    */
 }

@@ -11,7 +11,10 @@ import java.util.Objects;
  * This application is an inventory management system that allows for addition, modification, and deletion of both in-house
  * and outsourced parts. Those parts can in turn be added to a list of products which they are used to produce.
  *
- * FUTURE ENHANCEMENT: //FIXME 
+ * FUTURE ENHANCEMENT: A future enhancement of this application could be to include a check to verify that the sum of
+ * prices of a product's associated parts does not exceed the price of the product or the acceptable profit margin.
+ *
+ * Generated javadoc files is located in BalabisProject/javadoc
  */
 public class Main extends Application {
 
