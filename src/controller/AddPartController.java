@@ -144,7 +144,6 @@ public class AddPartController implements Initializable {
      *
      * @return New part ID.
      */
-    //FIXME: can I do this somewhere else, like Main?
     private int generateId() {
         int maxId = 1;
         ObservableList<Part> allParts = Inventory.getAllParts();

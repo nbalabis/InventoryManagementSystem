@@ -193,7 +193,6 @@ public class AddProductController implements Initializable {
      *
      * @return New product ID.
      */
-    //FIXME: move method to Main.java
     private int generateId() {
         int maxId = 1000;
         ObservableList<Product> allProducts = Inventory.getAllProducts();

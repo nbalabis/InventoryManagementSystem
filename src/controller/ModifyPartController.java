@@ -208,7 +208,6 @@ public class ModifyPartController implements Initializable {
      * @param actionEvent Cancel button clicked.
      * @throws IOException Throws IO Exception.
      */
-    //FIXME: can I change this to notnull?
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Main.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();

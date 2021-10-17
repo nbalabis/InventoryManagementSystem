@@ -23,6 +23,11 @@ import java.util.ResourceBundle;
 /**
  * Controller logic for Modify Product page.
  *
+ * LOGICAL ERROR: On my first attempt, changes to the associated parts list would be saved after canceling product
+ * modification. To fix this, I created a temporary parts list that gets populated with the same parts as those
+ * associated with the selected product. When product modification canceled, the list is trashed. If product
+ * modification is saved, the temporary list becomes the associated parts list of the new product.
+ *
  * @author Nicholas Balabis
  */
 public class ModifyProductController implements Initializable {

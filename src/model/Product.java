@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
  * @author Nicholas Balabis
  */
 public class Product {
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList(); //FIXME: will adding 'final' affect any parts of project?
+    private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private double price;

@@ -9,9 +9,9 @@ import javafx.collections.ObservableList;
  * @author Nicholas Balabis
  */
 public class Inventory {
-    private static ObservableList<Part> allParts = FXCollections.observableArrayList(); //FIXME: will adding 'final' affect any parts of project?
+    private static final ObservableList<Part> allParts = FXCollections.observableArrayList();
 
-    private static ObservableList<Product> allProducts = FXCollections.observableArrayList(); //FIXME: will adding 'final' affect any parts of project?
+    private static final ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
     /**
      * Adds a part to inventory.
@@ -99,7 +99,7 @@ public class Inventory {
      * @param index Index of part.
      * @param selectedPart Part to be replaced.
      */
-    public static void updatePart(int index, Part selectedPart) { //FIXME: Can I use these on Modify pages? Built-in method to find index?
+    public static void updatePart(int index, Part selectedPart) {
         allParts.set(index, selectedPart);
     }
 
@@ -109,7 +109,7 @@ public class Inventory {
      * @param index Index of product.
      * @param newProduct Product to be replaced.
      */
-    public static void updateProduct(int index, Product newProduct) { //FIXME: Can I use these on Modify pages? Built-in method to find index?
+    public static void updateProduct(int index, Product newProduct) {
         allProducts.set(index, newProduct);
     }
 

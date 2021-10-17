@@ -31,7 +31,7 @@ public class Outsourced extends Part{
      */
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    } //FIXME: method never used
+    }
 
     /**
      * Company name getter.

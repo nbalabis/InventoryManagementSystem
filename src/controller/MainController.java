@@ -8,16 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -179,9 +177,15 @@ public class MainController implements Initializable {
         if(selectedPart == null) {
             displayError(3);
         } else {
-            Inventory.deletePart(selectedPart);
-            partTableView.setItems(Inventory.getAllParts());
-            displayError(0);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setContentText("Are you sure you want to delete the selected part?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Inventory.deletePart(selectedPart);
+                partTableView.setItems(Inventory.getAllParts());
+                displayError(0);
+            }
         }
     }
 
@@ -195,10 +199,18 @@ public class MainController implements Initializable {
         Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
         if(selectedProduct == null) {
             displayError(4);
+        } else if(selectedProduct.getAllAssociatedParts().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setContentText("Are you sure you want to delete the selected product?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Inventory.deleteProduct(selectedProduct);
+                productTableView.setItems(Inventory.getAllProducts());
+                displayError(0);
+            }
         } else {
-            Inventory.deleteProduct(selectedProduct);
-            productTableView.setItems(Inventory.getAllProducts());
-            displayError(0);
+            displayError(5);
         }
     }
 
@@ -306,6 +318,9 @@ public class MainController implements Initializable {
                 break;
             case 4:
                 errorMsg.setText("Select a product to delete.");
+                break;
+            case 5:
+                errorMsg.setText("Cannot delete a product with associated parts.");
                 break;
         }
     }
